@@ -8,7 +8,7 @@ fun main(){
     student2.display()
     student3.display()
 }
-//primary constructor and secondary constructor the primary constructor property values is do not change directly
+//primary constructor property values is do not change directly using functions and secondary contractor
 //secondary constructor changed values reassign the primary constructor property values
 class Students(
     private val stuName:String,
