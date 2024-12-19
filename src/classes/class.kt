@@ -4,101 +4,96 @@ import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.system.exitProcess
 
+lateinit var account: Account
 fun main() {
-    start()
+    account = Account(1001, "Vijay", 0.0)
+
+    showMenu()
 }
 
-fun start() {
-    val user1 = Account(1001, "Vijay")
-    user1.reload()
-}
-private class Account(private var acNo: Int, private var userName: String) {
-    private var balance: Double = 0.0
-    private var transaction: Double = 0.0
-    private var transactionHistory = emptyList<String>().toMutableList()
-
-    fun reload() {
-        print("Deposit - 1\nWithdrawal - 2\nBalanceCheck - 3\nTransactionHistory - 4\nclose and exit - 5\n")
-        print("Chose the choice: ")
-        val input = readln()
+fun showMenu() {
+    do {
+        println("1 - Deposit\n2 - Withdraw\n3 - Check balance\n4 - Transaction history\n5 - Exit")
+        print("Choose the choice: ")
         try {
-            val choice = input.toInt()
-            if (5 >= choice) {
-                when (choice) {
-                    1 -> deposit(userInput(choice).toInt())
-                    2 -> withdral(userInput(choice).toInt())
-                    3 -> balanceCheck()
-                    4 -> transactionHistoryCheck()
-                    5 -> exitProcess(0)
-                }
-            } else {
-                println("Invalid choice")
-                reload()
+            when (val choice = readln().toInt()) {
+                1 -> deposit(choice)
+                2 -> withdraw(choice)
+                3 -> displayBalance(account)
+                4 -> displayTransactions(account)
+                5 -> exitProcess(0)
+                else -> println("Invalid choice")
             }
-
         } catch (e: NumberFormatException) {
             println("Invalid input! Please enter a valid integer.")
-            reload()
         }
-    }
+        println()
+    } while (true)
+}
 
-    fun balanceCheck() {
-        if (balance >= 0) {
-            println("Balance:$balance")
-        } else {
-            println("Is Amount not in there account:Available balance is $balance")
-        }
-        reload()
-    }
+fun withdraw(choice: Int) {
+    println(TransactionManager.withdraw(userInput(choice), account).message)
+}
 
-    fun deposit(money: Int) {
+fun deposit(choice: Int) {
+    println(TransactionManager.deposit(userInput(choice), account).message)
+}
+
+fun userInput(check: Int): Double {
+    when (check) {
+        1 -> print("Enter the Deposit amount    :")
+        2 -> print("Enter the withdrawal amount :")
+    }
+    return readln().toDouble()
+}
+
+fun displayBalance(target: Account) {
+    println("Available Balance: ${target.balance}")
+}
+
+fun displayTransactions(target: Account) {
+    println("Transaction history for user: ${target.userName}")
+    println("Account number: ${target.accountNumber}")
+    target.transactions.forEachIndexed { index, transaction ->
+        println("${index + 1}. $transaction")
+    }
+}
+
+data class Account(
+    val accountNumber: Int,
+    val userName: String,
+    var balance: Double,
+    val transactions: MutableList<String> = mutableListOf(),
+)
+
+data class Status(
+    val isSuccess: Boolean,
+    val message: String?
+)
+
+object TransactionManager {
+
+    fun deposit(money: Double, target: Account): Status {
         if (money > 0) {
-            transaction += money
-            balance = transaction
-            println("Message : AcNo:xxx$acNo and AcName:$userName credited $money and account balance is $balance")
-            transactionHistory.add("Successes :transaction Date :${LocalDate.now()} and time Time:${LocalTime.now()}")
+            target.balance += money
+            target.transactions.add("Amount of Rs.$money credited. Date :${LocalDate.now()} and Time:${LocalTime.now()}")
+            return Status(true, "Amount of Rs.$money deposited successfully!")
         } else {
-            println("The value is negative and precision")
-            transactionHistory.add("Failed :transaction Date :${LocalDate.now()} and time Time:${LocalTime.now()}")
+            return Status(false, "The value is negative and precision")
         }
-        reload()
     }
 
-    fun withdral(money: Int) {
-        if (balance >= money) {
-            transaction -= money
-            balance = transaction
-            println("Message : AcNo:xxx$acNo and AcName:$userName Debited $money and account balance is $balance")
-            transactionHistory.add("Success : transaction Date :${LocalDate.now()} and time Time:${LocalTime.now()}")
+    fun withdraw(money: Double, target: Account): Status {
+        if (target.balance >= money) {
+            target.balance -= money
+            target.transactions.add("Amount of Rs.$money debited. Date :${LocalDate.now()} and Time:${LocalTime.now()}")
+            return Status(
+                true,
+                "Amount of Rs.$money debited successfully!"
+            )
         } else {
-            println("Is Amount not in there account:Available balance is $balance")
-            transactionHistory.add("Failed :transaction Date :${LocalDate.now()} and time Time:${LocalTime.now()}")
+            return Status(false, "Insufficient balance. Available balance ${target.balance}")
         }
-        reload()
-    }
-
-    fun transactionHistoryCheck() {
-        print("TransactionHistory: ")
-        if (transactionHistory.isEmpty()) {
-            print("No transaction history\n")
-        } else {
-            for (i in transactionHistory) {
-                println("      $i")
-            }
-        }
-        reload()
-    }
-
-    fun userInput(check: Int): Double {
-        when (check) {
-            1 -> print("Enter the Deposit amount    :")
-            2 -> print("Enter the withdrawal amount :")
-        }
-        return money()
-    }
-
-    fun money(): Double {
-        val amount: Double = readln().toDouble(); return amount
     }
 
 }
