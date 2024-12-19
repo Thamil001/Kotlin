@@ -13,6 +13,7 @@ fun main(){
 class Students(
     private val stuName:String,
     private val rollNumber:String,
+
     private var department:String
 ){
 
