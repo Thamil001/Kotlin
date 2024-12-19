@@ -12,7 +12,6 @@ fun start() {
     val user1 = Account(1001, "Vijay")
     user1.reload()
 }
-
 private class Account(private var acNo: Int, private var userName: String) {
     private var balance: Double = 0.0
     private var transaction: Double = 0.0
