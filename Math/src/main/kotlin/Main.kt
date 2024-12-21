@@ -5,4 +5,5 @@ class Math(
 ){
     fun add()=a+b
 
+
 }
