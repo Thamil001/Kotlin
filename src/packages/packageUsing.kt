@@ -1,3 +1,4 @@
+/*
 package packages
 
 fun main(){
@@ -5,9 +6,10 @@ fun main(){
     var b:Any=10
     a=a.toString().toDouble()
     b=b.toString().toDouble()
-    val m1=Mathematics(a,b)
+    //val m1=Mathematics(a,b)
     println(m1.add())
     println(m1.mutiplication())
     println(m1.division())
     println(m1.sub())
-}
+
+}*/
