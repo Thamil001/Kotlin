@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Math.iml" filepath="$PROJECT_DIR$/Math.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Math.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Math.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Math.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Math.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.iml" filepath="$PROJECT_DIR$/kotlin.iml" />
     </modules>
   </component>
